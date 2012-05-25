@@ -23,13 +23,13 @@ class Chef
         Chef::Log.debug "Reporting #{run_status.inspect}"
         if run_status.failed?
           Chef::Log.debug "Notifying Graylog server of failure."
-          @notifier.notify!(:short_message => "Chef run failed on #{node.name}. Updated #{changes[:count]} resources.",
+          @notifier.notify!(:short_message => "Chef run failed on #{node[:hostname]}. Updated #{changes[:count]} resources.",
                             :full_message => run_status.formatted_exception + "\n" + Array(backtrace).join("\n") + changes[:message],
                             :level => ::GELF::Levels::FATAL,
                             :host => host_name)
         else
           Chef::Log.debug "Notifying Graylog server of success."
-          @notifier.notify!(:short_message => "Chef run completed on #{node.name} in #{elapsed_time}. Updated #{changes[:count]} resources.",
+          @notifier.notify!(:short_message => "Chef run completed on #{node[:hostname]} in #{elapsed_time}. Updated #{changes[:count]} resources.",
                             :full_message => changes[:message],
                             :level => ::GELF::Levels::INFO,
                             :host => host_name)
